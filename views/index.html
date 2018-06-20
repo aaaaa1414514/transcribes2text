@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>{{title}}</title>
+  <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.js"></script>
+</head>
+<style>
+  .fr{
+    float:right
+  }
+</style>
+<body>
+  <h1>
+    <input  type="file" id="file"/>
+    <button class="btn fr" id="btn">
+      提交
+    </button>  
+
+    <textarea id="textarea"></textarea>
+  </h1>
+  <p></p>
+<script>
+$(function(){
+  const $file = $("#file")
+  const $textarea = $("#textarea")
+  $("#btn").on("click", res => {
+    $.post("/speechToText",{},res => {
+      console.log(res)
+      if (res.status == 1) {
+        let data = res.data.results[0].alternatives[0].transcript
+        $textarea.val(data)
+      } else {
+        alert(res.err)
+      }
+      
+    })
+  })
+})
+</script>
+</body>
+
+</html>
