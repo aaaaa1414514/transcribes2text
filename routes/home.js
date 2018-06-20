@@ -3,8 +3,7 @@ const speechToText = require('../models/speech2text').speechToText
 module.exports = {
   async index (ctx, next) {
     await ctx.render('index', {
-      title: 'abc-blog',
-      desc: '欢迎关注公众号 JavaScript之禅'
+      title: '语音转文字',
     })
   },
   async speechToText(ctx, next) {
