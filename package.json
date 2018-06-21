@@ -17,7 +17,10 @@
   },
   "homepage": "https://github.com/aaaaa1414514/transcribes2text#readme",
   "dependencies": {
+    "@ffmpeg-installer/ffmpeg": "^1.0.15",
+    "baidu-aip-sdk": "^2.3.1",
     "combined-stream": "^1.0.6",
+    "fluent-ffmpeg": "^2.1.2",
     "koa": "^2.5.1",
     "koa-router": "^7.4.0",
     "koa-views": "^6.1.4",

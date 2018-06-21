@@ -19,7 +19,7 @@
       提交
     </button>  
 
-    <textarea id="textarea"></textarea>
+    <div id="textarea"></div>
   </h1>
   <p></p>
 <script>
@@ -30,13 +30,17 @@ $(function(){
     $.post("/speechToText",{},res => {
       console.log(res)
       if (res.status == 1) {
-        let data = res.data.results[0].alternatives[0].transcript
-        $textarea.val(data)
+        let str= ""
+        let data = res.data.results
+        for (let i=0; i < data.length; i++) {
+          str += data[i].alternatives[0].transcript + ','
+        }
+        console.log(str)
+        $textarea.text(str)
       } else {
-        alert(res.err)
+        console.log(res.err)
       }
-      
-    })
+    },'json')
   })
 })
 </script>

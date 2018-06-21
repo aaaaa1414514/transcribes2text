@@ -1,5 +1,5 @@
 const SpeechToTextV1 = require('watson-developer-cloud/speech-to-text/v1')
-const fs = require("fs") 
+const fs = require("fs")
 const CombinedStream = require('combined-stream')
 const speechToText = new SpeechToTextV1({
   url: 'https://stream.watsonplatform.net/speech-to-text/api',
@@ -8,10 +8,11 @@ const speechToText = new SpeechToTextV1({
 })
 
 module.exports = {
-  async speechToText(params) {
+  async speechToText (params) {
     var combinedStream = CombinedStream.create()
     combinedStream.append(fs.createReadStream(params.audio))
     const recognizeParams = {
+      model: 'zh-CN_NarrowbandModel',
       audio: combinedStream,
       'content_type': 'audio/flac',
       timestamps: true,
@@ -19,7 +20,7 @@ module.exports = {
       keywords: ['colorado', 'tornado', 'tornadoes'],
       'keywords_threshold': 0.5
     }
-    const promise = new Promise(function (resolve, reject) {
+    return new Promise(function (resolve, reject) {
       speechToText.recognize(recognizeParams, function (err, res) {
         if (err) {
           console.log('err')
@@ -28,14 +29,12 @@ module.exports = {
             err: err
           })
         } else {
-          console.log('success')
           resolve({
             status: 1,
-            data: JSON.stringify(res, null, 2)
+            data: res
           })
         }
       })
     })
-    return promise
   }
 }
