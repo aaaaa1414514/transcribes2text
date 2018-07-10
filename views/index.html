@@ -27,20 +27,35 @@ $(function(){
   const $file = $("#file")
   const $textarea = $("#textarea")
   $("#btn").on("click", res => {
-    $.post("/speechToText",{},res => {
-      console.log(res)
-      if (res.status == 1) {
-        let str= ""
-        let data = res.data.results
-        for (let i=0; i < data.length; i++) {
-          str += data[i].alternatives[0].transcript + ','
+    let file = $file[0].files[0]
+    let formData = new FormData()
+    formData.append('file', file, file.name)
+    console.log(file)
+    $.ajax({
+      url: '/speechToText',
+      data: formData,
+      type: 'post',
+      //ajax2.0可以不用设置请求头，但是jq帮我们自动设置了，这样的话需要我们自己取消掉  
+      contentType: false,
+      //取消帮我们格式化数据，是什么就是什么  
+      processData: false,
+      success(res) {
+        if (res.status == 1) {
+          let str = ""
+          let data = res.data.results
+          for (let i = 0; i < data.length; i++) {
+            str += data[i].alternatives[0].transcript + ','
+          }
+          console.log(str)
+          $textarea.text(str)
+        } else {
+          console.log(res.err)
         }
-        console.log(str)
-        $textarea.text(str)
-      } else {
-        console.log(res.err)
+      },
+      error(err) {
+        console.log(err)
       }
-    },'json')
+    })  
   })
 })
 </script>

@@ -23,7 +23,6 @@ module.exports = {
     return new Promise(function (resolve, reject) {
       speechToText.recognize(recognizeParams, function (err, res) {
         if (err) {
-          console.log('err')
           reject({
             status: 0,
             err: err

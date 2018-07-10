@@ -2,7 +2,6 @@ const speechToText = require('../models/speech2text').speechToText
 const voiceBuffer = require('../models/voiceBuffer').voiceBuffer
 const CombinedStream = require('combined-stream')
 const ffmpeg = require('../models/ffmpeg').ffmpeg
-
 module.exports = {
   async index (ctx, next) {
     await ctx.render('index', {
@@ -11,16 +10,21 @@ module.exports = {
   },
   // type: 1 百度； 2 ibm
   async speechToText(ctx, next) {
+    const file = ctx.req.file
+    console.log(file)
     let params = {
-      audio: './resources/周杰伦 - 青花瓷.mp3',
+      name: file.filename,
+      audio: file.path,
       type: 2
     }
-    //转码
-    
-    let suffix = params.audio.replace(/.+\./, "")
-    console.log(suffix)
+    // 转码
+    let suffix = file.originalname.replace(/.+\./, "")
     if (suffix !== 'flac'){
-      await ffmpeg(params).catch(err => {
+      await ffmpeg(params).then(res => {
+        if (res.status === 1) {
+          params.audio += '.flac'
+        }
+      }).catch(err => {
         console.log(err)
         return err
       })
